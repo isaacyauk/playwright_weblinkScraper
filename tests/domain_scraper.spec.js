@@ -3,7 +3,7 @@ const fs = require('fs');  // File System module for writing to a file
 
 
 test('scrape links', async ({ page }) => {
-    let prompt = ("Isaac Yauk"); // Edit the prompt as desired here
+    let prompt = ("Dogs"); // Edit the prompt as desired here
     let pageNum = 0; // This is the value that the link reconizes as a page number. Increment by 10.
     const outputPath = './scrape-results.txt';
     fs.writeFileSync(outputPath, '', 'utf-8'); // Clears the output file before writing.
@@ -16,7 +16,11 @@ test('scrape links', async ({ page }) => {
 
         // Filter out YouTube and Google links
         const filteredLinks = links
-            .filter(link => !link.includes('youtube.com') && !link.includes('google.com') && !link.includes('facebook.com'));
+            .filter(link => !link.includes('youtube.com') && !link.includes('google.com') && !link.includes('facebook.com'))
+            .map(link => {
+                const match = link.match(/^(https?:\/\/[^\/]+)(\/|$)/);
+                return match ? match[1] : link;  // Extract main domain (e.g., "https://example.com")
+            });
 
         // Print each filtered link to the file
         filteredLinks.forEach(link => {
