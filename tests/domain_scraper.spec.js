@@ -19,7 +19,8 @@ test('scrape links', async ({ page }) => {
             .filter(link => !link.includes('youtube.com') && !link.includes('google.com') && !link.includes('facebook.com'))
             .map(link => {
                 const match = link.match(/^(https?:\/\/[^\/]+)(\/|$)/);
-                return match ? match[1] : link;  // Extract main domain (e.g., "https://example.com")
+                const trimmedLink = match ? match[1] : link;
+                return trimmedLink.replace(/^https?:\/\//, '127.0.0.1 ');
             });
 
         // Print each filtered link to the file
